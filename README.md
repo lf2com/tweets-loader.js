@@ -13,6 +13,18 @@ Show recent tweets with hashtag `#corgi`. Auto insert new tweets on the top.
 npm install https://github.com/lf2com/tweets-loader.js
 ```
 
+##### Build
+The required codes are `tweets-loader.js` and `lib/*.js`. All dependencies in `package.json` are only used for building a packaged and minified `tweets-loader.min.js`. It is easy to build a browser-used `magnet.js` with your own ways.
+
+There is a script to build `tweets-loader.min.js`:
+```nodejs
+npm run build
+```
+Which runs
+```nodejs
+browserify tweets-loader.js -t [ babelify --presets [ es2015 ] ] | uglifyjs -cm > tweets-loader.min.js
+```
+
 ### Browser
 Download `tweets-loader.min.js` from this repository.
 ```html
