@@ -10,7 +10,6 @@
   let isDocReady = false;
 
   const isset = (o) => ('undefined'!==typeof o);
-  const isstr = (s) => (isset(s)&&('string'===typeof s||s instanceof String));
   const checkLoad = () => {
     if (TweetsLoader.isReady()) {
       while (tweetQueue.length) {
