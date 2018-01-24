@@ -5,7 +5,6 @@
 
   const EventHandler = require('./lib/event-handler');
   const MutationObserver = (window.MutationObserver||window.WebKitMutationObserver);
-  const selfEventHandler = new EventHandler(self);
   const tweetQueue = [];
   let isReady = false;
   let isDocReady = false;
@@ -83,18 +82,16 @@
   };
 
   TweetsLoader.prototype.id = function(id) {
-    if (isstr(id)) {
-      if (this.id !== id) {
-        this.remove();
-        Object.defineProperty(this, 'id', { value: id, enumerable: false });
-        Object.defineProperty(this, '_dom', { value: document.createElement('twttr'), enumerable: false });
-        this._dom.style.display = 'none';
-        this._dom.style.pointerEvents = 'none';
-        if (TweetsLoader.isReady()) {
-          tweetInit(this);
-        } else {
-          tweetQueue.push(this);
-        }
+    if (isset(id) && this.id !== id) {
+      this.remove();
+      Object.defineProperty(this, 'id', { value: id, enumerable: false });
+      Object.defineProperty(this, '_dom', { value: document.createElement('twttr'), enumerable: false });
+      this._dom.style.display = 'none';
+      this._dom.style.pointerEvents = 'none';
+      if (TweetsLoader.isReady()) {
+        tweetInit(this);
+      } else {
+        tweetQueue.push(this);
       }
       return this;
     } else {
