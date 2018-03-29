@@ -138,26 +138,32 @@
       let addTweets = (doms) => {
         let tweets = Array.prototype.map.call(doms, (dom) => {
           let domAuthor = dom.querySelector('.timeline-Tweet-author');
-          let domAuthorIcon = domAuthor.querySelector('.Avatar');
+          let domAuthorIcon = (domAuthor ?domAuthor.querySelector('.Avatar') :null);
           let domText = dom.querySelector('.timeline-Tweet-text');
           let domMedia = dom.querySelector('.timeline-Tweet-media');
           let domMetadata = dom.querySelector('.timeline-Tweet-metadata');
+          let domId = dom.querySelector('.timeline-Tweet');
+          let domIdUrl = (domMetadata ?domMetadata.querySelector('a') :null);
+          let domAuthorName = (domAuthor ?domAuthor.querySelector('.TweetAuthor-name') :null);
+          let domAuthorStatus = (domAuthor ?domAuthor.querySelector('.TweetAuthor-screenName') :null);
+          let domLink = (domAuthor ?domAuthor.querySelector('.TweetAuthor-link') :null);
+          let domDate = (domMetadata ?domMetadata.querySelector('time') :null);
           let tweet = new Tweet({
-            id: dom.querySelector('.timeline-Tweet').getAttribute('data-tweet-id'),
-            url: domMetadata.querySelector('a').getAttribute('href'),
+            id: (domId ?domId.getAttribute('data-tweet-id') :undefined),
+            url: (domIdUrl ?domIdUrl.getAttribute('href') :undefined),
             author: {
-              name: domAuthor.querySelector('.TweetAuthor-name').innerHTML.replace(/\<[^\>]+\>/g, (s) => (s.match(/\balt\=[\"\']([^\'\"]*)[\'\"]/)||[])[1]||''),
-              status: domAuthor.querySelector('.TweetAuthor-screenName').innerHTML.slice(1),
+              name: (domAuthorName ?domAuthorName.innerHTML.replace(/\<[^\>]+\>/g, (s) => (s.match(/\balt\=[\"\']([^\'\"]*)[\'\"]/)||[])[1]||'') :undefined),
+              status: (domAuthorStatus ?domAuthorStatus.innerHTML.slice(1) :undefined),
               thumbnails: {
-                small: domAuthorIcon.getAttribute('data-src-1x'),
-                large: domAuthorIcon.getAttribute('src')
+                small: (domAuthorIcon ?domAuthorIcon.getAttribute('data-src-1x') :undefined),
+                large: (domAuthorIcon ?domAuthorIcon.getAttribute('src') :undefined)
               },
-              url: domAuthor.querySelector('.TweetAuthor-link').getAttribute('href')
+              url: (domLink ?domLink.getAttribute('href') :undefined)
             },
-            date: new Date(domMetadata.querySelector('time').getAttribute('datetime')),
-            hashtags: Array.prototype.map.call(domText.querySelectorAll('.hashtag .PrettyLink-value'), (elm) => elm.innerHTML),
-            mentions: Array.prototype.map.call(domText.querySelectorAll('.profile .PrettyLink-value'), (elm) => elm.innerHTML),
-            text: domText.innerHTML.replace(/<[^\>]+\>/g, '').trim(),
+            date: (domDate ?new Date(domDate.getAttribute('datetime')) :undefined),
+            hashtags: (domText ?Array.prototype.map.call(domText.querySelectorAll('.hashtag .PrettyLink-value'), (elm) => elm.innerHTML) :undefined),
+            mentions: (domText ?Array.prototype.map.call(domText.querySelectorAll('.profile .PrettyLink-value'), (elm) => elm.innerHTML) :undefined),
+            text: (domText ?domText.innerHTML.replace(/<[^\>]+\>/g, '').trim() :undefined),
             medias: (domMedia ?Array.prototype.map.call(domMedia.querySelectorAll('a:not(.Interstitial-link)'), (elm) => {
               let img = elm.querySelector('img');
               let media = {
