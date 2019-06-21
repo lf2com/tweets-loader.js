@@ -1,6 +1,6 @@
 (() => {
   const qs = location.search.substr(1);
-  qs = encodeURIComponent(list);
+  qs = encodeURIComponent(qs);
   if (!qs.length) {
     return alert('No query string of code');
   }
